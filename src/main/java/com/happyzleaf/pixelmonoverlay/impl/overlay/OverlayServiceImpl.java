@@ -46,6 +46,9 @@ public class OverlayServiceImpl implements OverlayService {
 		for (Player player : Sponge.getServer().getOnlinePlayers()) {
 			showTo(player);
 		}
+		if(task != null) {
+			Sponge.getScheduler().getTaskById(task).ifPresent(t -> t.cancel());
+		}
 
 		task = Task.builder()
 				.delay(current.getDuration(), TimeUnit.SECONDS)
@@ -77,7 +80,8 @@ public class OverlayServiceImpl implements OverlayService {
 	@Override
 	public boolean reload() {
 		if (task != null) {
-			Sponge.getScheduler().getTaskById(task).ifPresent(t -> t.getConsumer().accept(t));
+			//Sponge.getScheduler().getTaskById(task).ifPresent(t -> t.getConsumer().accept(t));
+			Sponge.getScheduler().getTaskById(task).ifPresent(t -> t.cancel());
 		}
 
 		return broadcaster.reload();
